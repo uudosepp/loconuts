@@ -7,8 +7,8 @@ RUN apt-get update \
         libjpeg62-turbo-dev \
         libpng-dev \
         libzip-dev \
-        netcat-openbsd \
-        mysql-client \
+        netcat-traditional \
+        mariadb-client-core \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd mysqli pdo pdo_mysql zip \
     && apt-get clean \
