@@ -9,11 +9,21 @@ services:
       - key: WP_DEBUG
         value: false
       - key: DB_NAME
-        value: wordpress
+        fromDatabase:
+          name: wordpress_db
+          property: database
       - key: DB_USER
-        value: wordpress_user
-      # NOTE: DB_PASSWORD and DB_HOST must be set manually in Render dashboard
-      # after MySQL service is created, or they will be auto-provided by Render
+        fromDatabase:
+          name: wordpress_db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: wordpress_db
+          property: password
+      - key: DB_HOST
+        fromDatabase:
+          name: wordpress_db
+          property: host
     routes:
       - path: /
         matchType: prefix
