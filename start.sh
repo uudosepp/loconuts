@@ -7,37 +7,50 @@ echo "Starting WordPress application..."
 if [ ! -f "wp-config.php" ]; then
   echo "Creating wp-config.php..."
   
-  cat > wp-config.php << 'EOF'
+  # Generate unique salts for security
+  AUTH_KEY=$(openssl rand -base64 32)
+  SECURE_AUTH_KEY=$(openssl rand -base64 32)
+  LOGGED_IN_KEY=$(openssl rand -base64 32)
+  NONCE_KEY=$(openssl rand -base64 32)
+  AUTH_SALT=$(openssl rand -base64 32)
+  SECURE_AUTH_SALT=$(openssl rand -base64 32)
+  LOGGED_IN_SALT=$(openssl rand -base64 32)
+  NONCE_SALT=$(openssl rand -base64 32)
+  
+  cat > wp-config.php << EOF
 <?php
 /**
  * The base configuration for WordPress
  */
 
 // ** Database settings ** //
-define('DB_NAME', getenv('DB_NAME') ?: 'wordpress');
-define('DB_USER', getenv('DB_USER') ?: 'wordpress_user');
-define('DB_PASSWORD', getenv('DB_PASSWORD') ?: '');
-define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+define('DB_NAME', '${DB_NAME:-wordpress}');
+define('DB_USER', '${DB_USER:-wordpress_user}');
+define('DB_PASSWORD', '${DB_PASSWORD:-}');
+define('DB_HOST', '${DB_HOST:-localhost}');
 define('DB_CHARSET', 'utf8mb4');
 define('DB_COLLATE', '');
 
 // ** Authentication Unique Keys and Salts ** //
-define('AUTH_KEY',         'put your unique phrase here');
-define('SECURE_AUTH_KEY',  'put your unique phrase here');
-define('LOGGED_IN_KEY',    'put your unique phrase here');
-define('NONCE_KEY',        'put your unique phrase here');
-define('AUTH_SALT',        'put your unique phrase here');
-define('SECURE_AUTH_SALT', 'put your unique phrase here');
-define('LOGGED_IN_SALT',   'put your unique phrase here');
-define('NONCE_SALT',       'put your unique phrase here');
+define('AUTH_KEY',         '$AUTH_KEY');
+define('SECURE_AUTH_KEY',  '$SECURE_AUTH_KEY');
+define('LOGGED_IN_KEY',    '$LOGGED_IN_KEY');
+define('NONCE_KEY',        '$NONCE_KEY');
+define('AUTH_SALT',        '$AUTH_SALT');
+define('SECURE_AUTH_SALT', '$SECURE_AUTH_SALT');
+define('LOGGED_IN_SALT',   '$LOGGED_IN_SALT');
+define('NONCE_SALT',       '$NONCE_SALT');
 
 // ** WordPress Database Table prefix ** //
-$table_prefix = 'wp_';
+\$table_prefix = 'wp_';
 
 // ** For developers: WordPress debugging mode ** //
 define('WP_DEBUG', false);
 define('WP_DEBUG_LOG', false);
 define('WP_DEBUG_DISPLAY', false);
+
+// Enable REST API for headless WordPress
+define('WP_REST_ENABLED', true);
 
 /* Add any custom defines before this line. */
 
@@ -51,6 +64,7 @@ if ( ! defined('ABSPATH') ) {
 /** Sets up WordPress vars and included files. */
 require_once ABSPATH . 'wp-settings.php';
 EOF
+  echo "wp-config.php created successfully"
 fi
 
 # Create uploads directory if it doesn't exist

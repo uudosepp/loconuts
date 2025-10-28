@@ -1,26 +1,29 @@
 services:
   - type: web
     name: loconuts-wordpress
-    runtime: php
-    runtimeVersion: 8.2
-    buildCommand: ./build.sh
-    startCommand: ./start.sh
+    runtime: docker
+    dockerfilePath: ./Dockerfile
     envVars:
-      - key: PHP_VERSION
-        value: 8.2
       - key: WORDPRESS_ENV
         value: production
-    databases:
-      - name: wordpress_db
-        databaseName: wordpress
-        user: wordpress_user
-    staticPublicPath: /
+      - key: WP_DEBUG
+        value: false
+      - key: DB_NAME
+        value: wordpress
+      - key: DB_USER
+        value: wordpress_user
+      # NOTE: DB_PASSWORD and DB_HOST must be set manually in Render dashboard
+      # after MySQL service is created, or they will be auto-provided by Render
     routes:
       - path: /
         matchType: prefix
+    healthCheckPath: /
 
 databases:
   - name: wordpress_db
+    engine: mysql
+    version: "8.0"
+    plan: starter
+    region: ohio
     databaseName: wordpress
     user: wordpress_user
-    region: ohio

@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-# Install required extensions for WordPress
+# Install required extensions for WordPress (MySQL support)
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         libfreetype6-dev \
