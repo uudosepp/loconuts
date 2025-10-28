@@ -24,6 +24,9 @@ RUN a2enmod rewrite
 # Update Apache configuration to use DOCUMENT_ROOT
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html|g' /etc/apache2/sites-available/000-default.conf
 
+# Set ServerName to suppress warnings
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
 EXPOSE 80
 
 CMD ["./start.sh"]
