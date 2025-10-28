@@ -57,5 +57,6 @@ fi
 mkdir -p wp-content/uploads
 chmod 755 wp-content/uploads
 
-# Start PHP built-in server
-exec php -S 0.0.0.0:${PORT:-3000}
+# Configure Apache to listen on Railway's PORT (default 80 for Docker)
+# Railway will map this to the public port
+apache2-foreground

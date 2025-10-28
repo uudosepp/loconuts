@@ -1,33 +1,29 @@
-FROM php:8.2-cli
+FROM php:8.2-apache
 
 # Install required extensions for WordPress
-RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libzip-dev \
-    libxml2-dev \
-    git \
-    curl \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libpng-dev \
+        libzip-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) \
-        gd \
-        mysqli \
-        pdo \
-        pdo_mysql \
-        zip \
-        xml \
-        curl \
-        mbstring \
+    && docker-php-ext-install -j$(nproc) gd mysqli pdo pdo_mysql zip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
+WORKDIR /var/www/html
 
 COPY . .
 
 RUN chmod +x start.sh
 
-EXPOSE 3000
+# Enable mod_rewrite for WordPress pretty permalinks
+RUN a2enmod rewrite
+
+# Update Apache configuration to use DOCUMENT_ROOT
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html|g' /etc/apache2/sites-available/000-default.conf
+
+EXPOSE 80
 
 CMD ["./start.sh"]
