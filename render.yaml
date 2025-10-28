@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: loconuts-wordpress
+    runtime: php
+    runtimeVersion: 8.2
+    buildCommand: ./build.sh
+    startCommand: ./start.sh
+    envVars:
+      - key: PHP_VERSION
+        value: 8.2
+      - key: WORDPRESS_ENV
+        value: production
+    databases:
+      - name: wordpress_db
+        databaseName: wordpress
+        user: wordpress_user
+    staticPublicPath: /
+    routes:
+      - path: /
+        matchType: prefix
+
+databases:
+  - name: wordpress_db
+    databaseName: wordpress
+    user: wordpress_user
+    region: ohio

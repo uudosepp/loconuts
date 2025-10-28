@@ -1,0 +1,38 @@
+# WordPress
+/wp-admin/
+/wp-includes/
+/wp-content/plugins/
+/wp-content/uploads/
+/wp-content/cache/
+/wp-content/backup-*
+/wp-content/ai1wm-backups/
+wp-config.php
+wp-config-local.php
+*.log
+*.wpress
+
+# System files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Node modules
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+*.pem
+*.key

@@ -1,0 +1,25 @@
+/* --------------------------
+   Base Styles
+---------------------------*/
+
+body {
+    background: transparent;
+    background: #fff;
+color:#292929;
+    overflow:auto;
+}
+
+
+.light {font-weight:300;color:#292929;}
+.bold {font-weight:800;color:#292929;}
+
+:root{
+      
+      --card-bg: rgba(105, 105, 105, 0.02);
+      --card-border: rgba(255,255,255,0.04);
+      --muted: #1f1f1fff;
+      --accent: #020202ff; /* lilla */
+      --text: #000000ff;
+      
+    }
+
