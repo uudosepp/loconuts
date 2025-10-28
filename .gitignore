@@ -1,11 +1,19 @@
-# WordPress
+# WordPress core (downloaded fresh in Docker)
 /wp-admin/
 /wp-includes/
-/wp-content/plugins/
+
+# WordPress content - exclude user-generated files only
 /wp-content/uploads/
 /wp-content/cache/
 /wp-content/backup-*
 /wp-content/ai1wm-backups/
+/wp-content/plugins/jetpack/
+/wp-content/plugins/*/cache/
+# Keep custom themes and plugins
+!/wp-content/themes/
+!/wp-content/plugins/
+
+# WordPress config (always regenerated)
 wp-config.php
 wp-config-local.php
 *.log

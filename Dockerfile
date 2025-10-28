@@ -14,9 +14,22 @@ RUN apt-get update \
 
 WORKDIR /var/www/html
 
+# Download WordPress core files
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl \
+    && curl -o wordpress.tar.gz https://wordpress.org/latest.tar.gz \
+    && tar --strip-components=1 -xzf wordpress.tar.gz \
+    && rm wordpress.tar.gz \
+    && apt-get remove -y curl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy project files (theme, plugins, wp-config generator, etc.)
 COPY . .
 
-RUN chmod +x start.sh
+# Fix permissions
+RUN chmod +x start.sh \
+    && chown -R www-data:www-data /var/www/html
 
 # Enable mod_rewrite for WordPress pretty permalinks
 RUN a2enmod rewrite
