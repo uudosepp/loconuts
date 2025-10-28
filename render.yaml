@@ -7,7 +7,7 @@ services:
       - key: WORDPRESS_ENV
         value: production
       - key: WP_DEBUG
-        value: false
+        value: "false"
       - key: DB_NAME
         fromDatabase:
           name: wordpress_db
@@ -15,7 +15,7 @@ services:
       - key: DB_USER
         fromDatabase:
           name: wordpress_db
-          property: user
+          property: username
       - key: DB_PASSWORD
         fromDatabase:
           name: wordpress_db

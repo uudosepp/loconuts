@@ -2,10 +2,42 @@
 set -e
 
 echo "Starting WordPress application..."
+echo "DB_HOST: ${DB_HOST}"
+echo "DB_NAME: ${DB_NAME}"
+echo "DB_USER: ${DB_USER}"
+
+# Wait for MySQL to be ready
+if [ ! -z "$DB_HOST" ]; then
+  echo "Waiting for MySQL to become available at $DB_HOST:3306..."
+  max_attempts=60
+  attempt=0
+  while [ $attempt -lt $max_attempts ]; do
+    if nc -z "$DB_HOST" 3306 2>/dev/null; then
+      echo "✓ MySQL is ready!"
+      break
+    fi
+    attempt=$((attempt + 1))
+    echo "  → Attempt $attempt/$max_attempts..."
+    sleep 1
+  done
+  if [ $attempt -eq $max_attempts ]; then
+    echo "⚠ Warning: MySQL didn't respond in time, proceeding anyway..."
+  fi
+fi
 
 # Check if wp-config.php exists, if not create it
 if [ ! -f "wp-config.php" ]; then
   echo "Creating wp-config.php..."
+  echo "  Database Config: ${DB_HOST} / ${DB_NAME} / ${DB_USER}"
+  
+  # Validate database credentials
+  if [ -z "$DB_HOST" ] || [ -z "$DB_NAME" ] || [ -z "$DB_USER" ]; then
+    echo "⚠ Warning: Database credentials incomplete!"
+    echo "    DB_HOST: ${DB_HOST:-EMPTY}"
+    echo "    DB_NAME: ${DB_NAME:-EMPTY}"
+    echo "    DB_USER: ${DB_USER:-EMPTY}"
+    echo "    DB_PASSWORD: ${DB_PASSWORD:+SET}${DB_PASSWORD:-EMPTY}"
+  fi
   
   # Generate unique salts for security
   AUTH_KEY=$(openssl rand -base64 32)
