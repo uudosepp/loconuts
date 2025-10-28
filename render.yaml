@@ -11,11 +11,11 @@ services:
       - key: DB_NAME
         fromDatabase:
           name: wordpress_db
-          property: database
+          property: databaseName
       - key: DB_USER
         fromDatabase:
           name: wordpress_db
-          property: username
+          property: user
       - key: DB_PASSWORD
         fromDatabase:
           name: wordpress_db
